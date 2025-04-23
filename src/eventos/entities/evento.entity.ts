@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 export class Evento {
     id: number;
-    data: Date;
+    dia: Date;
     local: string;
-    descricao: string;
+    cerimonialista: string;
 }

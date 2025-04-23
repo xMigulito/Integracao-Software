@@ -1,4 +1,19 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable prettier/prettier */
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateEventoDto } from './create-evento.dto';
+import { IsDate, IsString } from 'class-validator';
 
-export class UpdateEventoDto extends PartialType(CreateEventoDto) {}
+export class UpdateEventoDto extends PartialType(CreateEventoDto) {
+
+    @IsDate()
+    dia: Date 
+
+    @IsString()
+    local: string
+    
+    @IsString()
+    cerimonialista: string
+
+}

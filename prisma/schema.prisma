@@ -15,7 +15,7 @@ datasource db {
 
 model Agenda {
   id Int @id @default(autoincrement())
-  dia DateTime? 
-  local String? @db.VarChar(200)
-  cerimonialista String? @db.VarChar(100)
+  dia DateTime 
+  local String @db.VarChar(200)
+  cerimonialista String @db.VarChar(100)
 }

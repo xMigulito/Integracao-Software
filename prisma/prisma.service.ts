@@ -1,21 +1,19 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
-/* eslint-disable prettier/prettier */
 @Injectable()
-export class PrismaService 
-  extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy
-{
-  onModuleDestroy() {
-      throw new Error('Method not implemented.');
+export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
+  constructor() {
+    console.log('DATABASE_URL:', process.env.DATABASE_URL);
+    super();
   }
+
   async onModuleInit() {
     await this.$connect();
   }
 
-  async OnModuleDestroy() {
+  async onModuleDestroy() {
     await this.$disconnect();
   }
 }
