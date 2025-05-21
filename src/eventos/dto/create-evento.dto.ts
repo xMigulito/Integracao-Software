@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import { IsDate, IsString } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsDate, isDate, IsString } from 'class-validator';
 
 export class CreateEventoDto {
+  @Type(() => Date)
+  @IsDate({ message: 'A data é obrigatória' })
+  dia: Date;
 
-    @IsDate()
-    dia: Date 
+  @IsString({ message: 'O local deve ser uma string' })
+  local: string;
 
-    @IsString()
-    local: string
-
-    @IsString()
-    cerimonialista: string
-
+  @IsString({ message: 'O cerimonialista deve ser uma string' })
+  cerimonialista: string;
 }

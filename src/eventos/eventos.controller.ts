@@ -1,5 +1,16 @@
 /* eslint-disable prettier/prettier */
-import { Controller, Get, Post, Body, Patch, Param, Delete, Headers } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Headers,
+  UnauthorizedException,
+  Query,
+} from '@nestjs/common';
 import { EventosService } from './eventos.service';
 import { CreateEventoDto } from './dto/create-evento.dto';
 import { UpdateEventoDto } from './dto/update-evento.dto';
@@ -7,7 +18,10 @@ import { AuthService } from 'src/auth/auth.service';
 
 @Controller('eventos')
 export class EventosController {
-  constructor(private readonly eventosService: EventosService, private readonly authService: AuthService) {}
+  constructor(
+    private readonly eventosService: EventosService,
+    private readonly authService: AuthService,
+  ) {}
 
   @Post()
   create(@Body() createEventoDto: CreateEventoDto) {
@@ -17,28 +31,53 @@ export class EventosController {
   @Get()
   findAll(
     @Headers('x-api-token') token: string,
+    @Query('dia') dia?: string,
+    @Query('local') local?: string,
+    @Query('cerimonialista') cerimonialista?: string,
   ) {
-
     if (!token) {
-      throw new Error('Token não fornecido');
+      throw new UnauthorizedException('Token não Enviado');
     }
     this.authService.validateToken(token);
 
-    return this.eventosService.findAll();
+    return this.eventosService.findAll(
+      dia ? new Date(dia) : undefined,
+      local,
+      cerimonialista,
+    );
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Headers('x-api-token') token: string, @Param('id') id: string) {
+    if (!token) {
+      throw new UnauthorizedException('Token não Enviado');
+    }
+    this.authService.validateToken(token);
+
     return this.eventosService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateEventoDto: UpdateEventoDto) {
+  update(
+    @Headers('x-api-token') token: string,
+    @Param('id') id: string,
+    @Body() updateEventoDto: UpdateEventoDto,
+  ) {
+    if (!token) {
+      throw new UnauthorizedException('Token não Enviado');
+    }
+    this.authService.validateToken(token);
+
     return this.eventosService.update(+id, updateEventoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Headers('x-api-token') token: string, @Param('id') id: string) {
+    if (!token) {
+      throw new UnauthorizedException('Token não Enviado');
+    }
+    this.authService.validateToken(token);
+
     return this.eventosService.remove(+id);
   }
 }
