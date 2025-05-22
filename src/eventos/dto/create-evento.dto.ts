@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { Type } from 'class-transformer';
-import { IsDate, isDate, IsString } from 'class-validator';
+import { IsDate, IsString } from 'class-validator';
 
 export class CreateEventoDto {
   @Type(() => Date)

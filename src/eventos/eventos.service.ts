@@ -54,6 +54,13 @@ export class EventosService {
         },
       ],
     });
+
+    console.log('agenda', agenda);
+
+    if (agenda.length === 0) {
+      throw new NotFoundException('Evento não encontrado');
+    }
+
     return agenda.map((agenda) => this.mapToEntity(agenda));
   }
 
@@ -80,7 +87,15 @@ export class EventosService {
     return this.mapToEntity(agenda);
   }
 
-  async update(id: number, updateEventoDto: UpdateEventoDto) {
+  async update(id: number, updateEventoDto: UpdateEventoDto): Promise<Evento> {
+    const agendaExists = await this.prisma.agenda.findUnique({
+      where: { id: id },
+    });
+
+    if (!agendaExists) {
+      throw new NotFoundException('Evento não encontrado');
+    }
+
     const agenda = await this.prisma.agenda.update({
       where: { id: id },
       data: updateEventoDto,
@@ -88,10 +103,19 @@ export class EventosService {
     return this.mapToEntity(agenda);
   }
 
-  async remove(id: number) {
-    const agenda = await this.prisma.agenda.delete({
+  async remove(id: number): Promise<string> {
+    const agendaExists = await this.prisma.agenda.findUnique({
       where: { id: id },
     });
-    return this.mapToEntity(agenda);
+
+    if (!agendaExists) {
+      throw new NotFoundException('Evento não encontrado');
+    }
+
+    await this.prisma.agenda.delete({
+      where: { id: id },
+    });
+
+    return 'Evento removido com sucesso';
   }
 }
